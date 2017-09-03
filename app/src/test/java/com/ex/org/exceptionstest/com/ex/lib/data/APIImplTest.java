@@ -12,19 +12,8 @@ public class APIImplTest {
 
     @Test
     public void testSendReport() throws Exception {
-        API api = new APIImpl(new API.Callback() {
-            @Override
-            public void onSuccess() {
-                System.out.println("onSuccess");
-
-            }
-
-            @Override
-            public void onError() {
-                System.out.println("onError");
-            }
-        });
-        api.sendReport(bowlingJson("Oren", "Daniella"), "myID");
+        APIImpl api = new APIImpl();
+        api.postToDelete(API.URL,bowlingJson("Oren", "Daniella"), "myID");
 
     }
 

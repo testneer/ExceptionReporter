@@ -10,7 +10,7 @@ import java.io.IOException;
  */
 
 public interface API {
-    public static final String URL = "http://localhost:9000/api/exceptions";
+    public static final String URL = "http://10.0.2.2:9000/api/exceptions";
 
     public interface Callback{
         void onSuccess();

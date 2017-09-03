@@ -64,7 +64,7 @@ public class APIImpl implements API {
     }
 
 
-    private String post(String url, String json, String id) throws IOException {
+    public String postToDelete(String url, String json, String id) throws IOException {
         RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder()
             .url(url)
