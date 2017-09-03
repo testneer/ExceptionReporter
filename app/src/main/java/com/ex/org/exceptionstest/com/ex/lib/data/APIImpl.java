@@ -1,13 +1,10 @@
 package com.ex.org.exceptionstest.com.ex.lib.data;
 
-import com.ex.org.exceptionstest.com.ex.lib.ExceptionReporter;
 import com.ex.org.exceptionstest.com.ex.lib.Util;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -31,7 +28,7 @@ public class APIImpl implements API {
     }
 
 
-    public void postAsync(String url, String json, String id, Callback callback) throws IOException {
+    public void postAsync(String url, String json, String id, final Callback callback) throws IOException {
 //        post(url, json, id);
         Util.log("Preparing to send file where id=" + id);
         RequestBody body = RequestBody.create(JSON, json);
@@ -48,7 +45,9 @@ public class APIImpl implements API {
             }
 
             @Override public void onResponse(Call call, Response response) throws IOException {
-                try (ResponseBody responseBody = response.body()) {
+                ResponseBody responseBody = null;
+                try {
+                    responseBody = response.body();
                     if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
                     Headers responseHeaders = response.headers();
@@ -58,6 +57,11 @@ public class APIImpl implements API {
 
                     System.out.println(responseBody.string());
                     callback.onSuccess();
+                }
+                finally {
+                    if (responseBody != null) {
+                        responseBody.close();
+                    }
                 }
             }
         });
@@ -71,8 +75,15 @@ public class APIImpl implements API {
             .post(body)
             .addHeader(HEADER_ID, id)
             .build();
-        try (Response response = client.newCall(request).execute()) {
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
             return response.body().string();
+        }
+        finally {
+            if (response != null) {
+                response.close();
+            }
         }
     }
 
