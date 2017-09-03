@@ -56,6 +56,7 @@ public class RepositoryImpl implements Repository {
                 api.sendReport(jsonPayload, file.getName(), new API.Callback() {
                     @Override
                     public void onSuccess() {
+
                         diskStore.deleteReport(file);
                     }
 
