@@ -11,6 +11,9 @@ import com.ex.org.exceptionstest.com.ex.lib.model.ExceptionReport;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Singleton and Entry point of the ExceptionReporter
@@ -59,7 +62,20 @@ public final class ExceptionReporter {
         if(!mInitiated){
             interceptExceptions();
             mInitiated = true;
+            setSendReportTimer();
         }
+    }
+
+    private void setSendReportTimer() {
+        ScheduledExecutorService scheduler =
+            Executors.newSingleThreadScheduledExecutor();
+
+        scheduler.scheduleAtFixedRate
+            (new Runnable() {
+                public void run() {
+                    mRepo.sendStoredReports();
+                }
+            }, 10, 10, TimeUnit.MINUTES);
     }
 
     private void interceptExceptions() {
