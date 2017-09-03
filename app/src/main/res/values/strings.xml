@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Exceptions Test</string>
+    <string name="btn_title_caught">Throw caught exception</string>
+    <string name="btn_title_uncaught">Throw uncaught exception</string>
+</resources>
