@@ -35,15 +35,24 @@ public final class ExceptionReporter {
 
     };
 
-    public static ExceptionReporter getInstance(Context ctx){
-        if(ctx == null){
+
+    /**
+      * The main integration point to your app.
+      * Call this from Application.getBaseContext(base Context) with "ExceptionReporter.getInstance(base).init()"
+      *
+      * @param context - Must be the application context
+      * @return the instance of this Singleton
+      */
+    public static ExceptionReporter getInstance(Context context){
+        if(context == null){
             throw new IllegalArgumentException("context can't be null");
         }
         if(sInstance == null) {
-            sInstance = new ExceptionReporter(ctx);
+            sInstance = new ExceptionReporter(context);
         }
         return sInstance;
     }
+
 
 
     public void init(){
