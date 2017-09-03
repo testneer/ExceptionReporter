@@ -18,8 +18,9 @@ import java.io.StringWriter;
 
 public final class ExceptionReporter {
 
-    private static ExceptionReporter instance;
-    private Repository repo;
+    //ERIK: Pls follow the Google naming convention: https://source.android.com/source/code-style
+    private static ExceptionReporter instance; // sInstance
+    private Repository repo; //mRepo
 
 
     public final static String LOG_TAG = "ExceptionReporter";
@@ -33,6 +34,8 @@ public final class ExceptionReporter {
 
     };
 
+    //ERIK - is there any specific reason why you require this to be an Application and not just a Context?
+    //ERIK2- to ensure that no one passes in the wrong context, it's better to just call context.getApplicationContext()
     public static ExceptionReporter getInstance(Application app){
         if(app == null){
             throw new IllegalArgumentException("Application can't be null");
@@ -45,6 +48,7 @@ public final class ExceptionReporter {
 
 
     public void init(){
+        //ERIK - it might be nice to prevent this from being called twice
         interceptExceptions();
     }
 
@@ -69,6 +73,7 @@ public final class ExceptionReporter {
     }
 
     //TODO: Not thread safe
+    //ERIK - why not thread save? I think only one uncaught exception handler can execute at one time anyways
     private void handleException(Thread thread, @NonNull Throwable throwable){
         //TODO: extract data from Thread and send to the crash report.
         if(throwable != null) {
@@ -79,6 +84,9 @@ public final class ExceptionReporter {
             //Save the report
             repo.saveExceptionReport(report);
         }
+        //ERIK - you probably want a try - catch (Throwable) around this whole block so that there is no
+        // risk of getting a new uncaught exception (since getting those in you oncaught exception handler
+        // is a very bad idea :) )
     }
 
 }

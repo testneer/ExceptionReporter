@@ -53,8 +53,8 @@ public class DiskStore{
         }
     }
 
-    public File[] getUnsentReport() {
-        File dir = ctx.getFilesDir();
+    public File[] getUnsentReport() { //ERIK getUnsentReport(s)?
+        File dir = ctx.getFilesDir(); //ERIK - you definitely want to create and use a subdirectory of the files folder. To avoid sending and deleting other files
         File[] subFiles = dir.listFiles();
         return subFiles;
     }

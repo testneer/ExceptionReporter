@@ -19,9 +19,10 @@ import java.util.Arrays;
 
 public class RepositoryImpl implements Repository {
 
-    private Context context;
-    private DiskStore diskStore;
-    private API api;
+    // ERIK more naming
+    private Context context; //mContext - if it's needed?
+    private DiskStore diskStore; //mDiskStore
+    private API api; // mApi
 
     public RepositoryImpl(Context ctx){
         this.context = ctx;
@@ -43,6 +44,8 @@ public class RepositoryImpl implements Repository {
 
     @Override
     public void sendStoredReports() {
+        //ERIK - looks like we are reading the reports on the main thread. While it's not a huge issue since
+        // we are only doing it on startup, it would still be better to do it on a background thread.
         Log.d(ExceptionReporter.LOG_TAG, "UNSENT REPORTS: " + Arrays.toString(diskStore.getUnsentReport()));
         File[] files = diskStore.getUnsentReport();
         for(final File file : files){
@@ -56,6 +59,7 @@ public class RepositoryImpl implements Repository {
                 api.sendReport(jsonPayload, file.getName(), new API.Callback() {
                     @Override
                     public void onSuccess() {
+                        //ERIK - since you are using the file here to delete it, why does the server have to respond with the id?
                         diskStore.deleteReport(file);
                     }
 
