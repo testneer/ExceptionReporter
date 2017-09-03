@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.ex.org.exceptionstest.com.ex.lib.ExceptionReporter;
+import com.ex.org.exceptionstest.com.ex.lib.Util;
 import com.ex.org.exceptionstest.com.ex.lib.model.ExceptionReport;
 
 import java.io.BufferedReader;
@@ -60,6 +61,7 @@ public class DiskStore{
     }
 
     public void deleteReport(@NonNull File file) {
+        Util.log("deleting file: " + file.getName());
         final boolean deleted = file.delete();
         if (!deleted) {
             Log.d(ExceptionReporter.LOG_TAG, "Failed to delete : " + file);
