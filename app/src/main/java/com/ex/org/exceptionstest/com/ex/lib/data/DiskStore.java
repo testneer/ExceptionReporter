@@ -2,35 +2,20 @@ package com.ex.org.exceptionstest.com.ex.lib.data;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.ex.org.exceptionstest.com.ex.lib.ExceptionReporter;
 import com.ex.org.exceptionstest.com.ex.lib.model.ExceptionReport;
 
-
-import org.acra.ACRAConstants;
-import org.acra.collections.BoundedLinkedList;
-import org.acra.collector.CrashReportData;
-import org.acra.util.IOUtils;
-import org.acra.util.JsonUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.nio.file.Files;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by orenegauthier on 02/09/2017.

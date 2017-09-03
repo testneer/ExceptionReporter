@@ -45,7 +45,7 @@ public class RepositoryImpl implements Repository {
     public void sendStoredReports() {
         Log.d(ExceptionReporter.LOG_TAG, "UNSENT REPORTS: " + Arrays.toString(diskStore.getUnsentReport()));
         File[] files = diskStore.getUnsentReport();
-        for(File file : files){
+        for(final File file : files){
 
             //load file
             try {

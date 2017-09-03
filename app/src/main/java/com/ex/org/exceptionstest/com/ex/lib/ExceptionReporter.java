@@ -3,16 +3,13 @@ package com.ex.org.exceptionstest.com.ex.lib;
 import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import com.ex.org.exceptionstest.com.ex.lib.data.DiskStore;
 import com.ex.org.exceptionstest.com.ex.lib.data.Repository;
 import com.ex.org.exceptionstest.com.ex.lib.data.RepositoryImpl;
 import com.ex.org.exceptionstest.com.ex.lib.model.ExceptionReport;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Arrays;
 
 /**
  * Singleton and Entry point of the ExceptionReporter
@@ -52,7 +49,7 @@ public final class ExceptionReporter {
     }
 
     private void interceptExceptions() {
-        Thread.UncaughtExceptionHandler defaultExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+        final Thread.UncaughtExceptionHandler defaultExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.UncaughtExceptionHandler interceptor = new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, Throwable throwable) {
