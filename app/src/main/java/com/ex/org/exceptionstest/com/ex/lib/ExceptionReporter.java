@@ -18,38 +18,38 @@ import java.io.StringWriter;
 
 public final class ExceptionReporter {
 
-    //ERIK: Pls follow the Google naming convention: https://source.android.com/source/code-style
-    private static ExceptionReporter instance; // sInstance
-    private Repository repo; //mRepo
+    private static ExceptionReporter sInstance;
+    private Repository mRepo;
+    private boolean mInitiated;
 
 
     public final static String LOG_TAG = "ExceptionReporter";
 
     //private constructor
     private ExceptionReporter(Context ctx){
-        repo = new RepositoryImpl(ctx);
+        mRepo = new RepositoryImpl(ctx);
         //If there are any unsent crashes send them now.
-        repo.sendStoredReports();
+        mRepo.sendStoredReports();
 
 
     };
 
-    //ERIK - is there any specific reason why you require this to be an Application and not just a Context?
-    //ERIK2- to ensure that no one passes in the wrong context, it's better to just call context.getApplicationContext()
-    public static ExceptionReporter getInstance(Application app){
-        if(app == null){
-            throw new IllegalArgumentException("Application can't be null");
+    public static ExceptionReporter getInstance(Context ctx){
+        if(ctx == null){
+            throw new IllegalArgumentException("context can't be null");
         }
-        if(instance == null) {
-            instance = new ExceptionReporter(app);
+        if(sInstance == null) {
+            sInstance = new ExceptionReporter(ctx);
         }
-        return instance;
+        return sInstance;
     }
 
 
     public void init(){
-        //ERIK - it might be nice to prevent this from being called twice
-        interceptExceptions();
+        if(!mInitiated){
+            interceptExceptions();
+            mInitiated = true;
+        }
     }
 
     private void interceptExceptions() {
@@ -66,27 +66,27 @@ public final class ExceptionReporter {
     }
 
     public static void logException(Exception caughtException){
-        if(instance == null){
+        if(sInstance == null){
             throw new IllegalStateException("ExceptionReporter.getInstance.init() must be called prior to calling this");
         }
-        instance.handleException(Thread.currentThread(), caughtException);
+        sInstance.handleException(Thread.currentThread(), caughtException);
     }
 
-    //TODO: Not thread safe
-    //ERIK - why not thread save? I think only one uncaught exception handler can execute at one time anyways
+    //TODO: Not thread safe - I should handle the case when this method is called from multiple worker threads.
+    //TODO: (prob just enqueue the logging requests)
     private void handleException(Thread thread, @NonNull Throwable throwable){
         //TODO: extract data from Thread and send to the crash report.
-        if(throwable != null) {
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            throwable.printStackTrace(pw);
-            ExceptionReport report = new ExceptionReport(sw.toString());
-            //Save the report
-            repo.saveExceptionReport(report);
+        try {
+            if (throwable != null) {
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
+                throwable.printStackTrace(pw);
+                ExceptionReport report = new ExceptionReport(sw.toString());
+                //Save the report
+                mRepo.saveExceptionReport(report);
+            }
+        }catch (Throwable t){
+            // do nothing.. let the exception propagate to the default handler
         }
-        //ERIK - you probably want a try - catch (Throwable) around this whole block so that there is no
-        // risk of getting a new uncaught exception (since getting those in you oncaught exception handler
-        // is a very bad idea :) )
     }
-
 }

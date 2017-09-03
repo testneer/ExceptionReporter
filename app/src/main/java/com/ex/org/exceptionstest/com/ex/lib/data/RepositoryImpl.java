@@ -19,20 +19,17 @@ import java.util.Arrays;
 
 public class RepositoryImpl implements Repository {
 
-    // ERIK more naming
-    private Context context; //mContext - if it's needed?
-    private DiskStore diskStore; //mDiskStore
-    private API api; // mApi
+    private DiskStore mDiskStore;
+    private API mApi; //
 
     public RepositoryImpl(Context ctx){
-        this.context = ctx;
-        diskStore = new DiskStore(ctx);
-        api = new APIImpl();
+        mDiskStore = new DiskStore(ctx);
+        mApi = new APIImpl();
     }
     @Override
     public void saveExceptionReport(ExceptionReport exceptionReport) {
         try {
-            diskStore.saveReportDataToFile(exceptionReport);
+            mDiskStore.saveReportDataToFile(exceptionReport);
         }
         catch (FileNotFoundException e) {
             Log.d(ExceptionReporter.LOG_TAG, "saveExceptionReport " + Log.getStackTraceString(e));
@@ -46,21 +43,21 @@ public class RepositoryImpl implements Repository {
     public void sendStoredReports() {
         //ERIK - looks like we are reading the reports on the main thread. While it's not a huge issue since
         // we are only doing it on startup, it would still be better to do it on a background thread.
-        Log.d(ExceptionReporter.LOG_TAG, "UNSENT REPORTS: " + Arrays.toString(diskStore.getUnsentReport()));
-        File[] files = diskStore.getUnsentReport();
+        Log.d(ExceptionReporter.LOG_TAG, "UNSENT REPORTS: " + Arrays.toString(mDiskStore.getStoredReports()));
+        File[] files = mDiskStore.getStoredReports();
         for(final File file : files){
 
             //load file
             try {
                 Util.log("Loading file named: " + file.getName());
-                String jsonPayload = diskStore.loadFileAsString(file);
+                String jsonPayload = mDiskStore.loadFileAsString(file);
                 Util.log("File Loaded: Payload = " + jsonPayload);
                 //send to server
-                api.sendReport(jsonPayload, file.getName(), new API.Callback() {
+                mApi.sendReport(jsonPayload, file.getName(), new API.Callback() {
                     @Override
                     public void onSuccess() {
                         //ERIK - since you are using the file here to delete it, why does the server have to respond with the id?
-                        diskStore.deleteReport(file);
+                        mDiskStore.deleteReport(file);
                     }
 
                     @Override

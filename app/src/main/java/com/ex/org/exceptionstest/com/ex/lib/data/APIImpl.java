@@ -21,10 +21,10 @@ public class APIImpl implements API {
 
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static final String HEADER_ID = "exceptionId";
-    private OkHttpClient client;
+    private OkHttpClient mClient;
 
     public APIImpl(){
-        client = new OkHttpClient();
+        mClient = new OkHttpClient();
     }
 
 
@@ -38,7 +38,7 @@ public class APIImpl implements API {
             .addHeader(HEADER_ID, id)
             .build();
 
-        client.newCall(request).enqueue(new okhttp3.Callback() {
+        mClient.newCall(request).enqueue(new okhttp3.Callback() {
             @Override public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
                 callback.onError();
@@ -77,7 +77,7 @@ public class APIImpl implements API {
             .build();
         Response response = null;
         try {
-            response = client.newCall(request).execute();
+            response = mClient.newCall(request).execute();
             return response.body().string();
         }
         finally {

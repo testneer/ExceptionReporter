@@ -16,6 +16,6 @@ public class BaseApplication extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        ExceptionReporter.getInstance(this).init();
+        ExceptionReporter.getInstance(base).init();
     }
 }

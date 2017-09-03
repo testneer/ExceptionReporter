@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 /**
  * Created by orenegauthier on 02/09/2017.
@@ -24,21 +25,21 @@ import java.io.UnsupportedEncodingException;
 
 public class DiskStore{
 
-    private Context ctx;
-    public static final int BUFFER_SIZE = 8192;
+    private Context mContext;
     public static final String UTF8 = "UTF-8";
+    private static final String FOLDER_NAME = "";
 
 
     public DiskStore(Context context){
-        this.ctx = context;
+        this.mContext = context;
     }
 
     public void saveReportDataToFile(@NonNull ExceptionReport exceptionReport) throws FileNotFoundException, UnsupportedEncodingException {
-        Log.d(ExceptionReporter.LOG_TAG, "Writing crash report to file " + exceptionReport.getExceptionTime());
-        String fileName = exceptionReport.getExceptionTime();
-        FileOutputStream fos = ctx.openFileOutput(fileName, Context.MODE_PRIVATE);
+        File dir = mContext.getDir(FOLDER_NAME, Context.MODE_PRIVATE);
+        File fullPath = new File(dir, exceptionReport.getExceptionTime());
+        Log.d(ExceptionReporter.LOG_TAG, "Writing crash report to file " + fullPath.getAbsolutePath());
+        FileOutputStream fos = mContext.openFileOutput(fullPath.getName(), Context.MODE_PRIVATE);
         OutputStreamWriter writer = new OutputStreamWriter(fos, UTF8);
-
         try {
             writer.write(exceptionReport.toJson().toString());
             writer.flush();
@@ -54,10 +55,11 @@ public class DiskStore{
         }
     }
 
-    public File[] getUnsentReport() { //ERIK getUnsentReport(s)?
-        File dir = ctx.getFilesDir(); //ERIK - you definitely want to create and use a subdirectory of the files folder. To avoid sending and deleting other files
+    public File[] getStoredReports() {
+        File dir = new File(mContext.getFilesDir(), FOLDER_NAME);
         File[] subFiles = dir.listFiles();
-        return subFiles;
+//        Log.d(ExceptionReporter.LOG_TAG, "Full dir path = " + dir.getAbsolutePath() + " " + Arrays.toString(subFiles));
+        return subFiles == null ? new File[0]:subFiles;
     }
 
     public void deleteReport(@NonNull File file) {
@@ -81,4 +83,6 @@ public class DiskStore{
 //        Log.d(ExceptionReporter.LOG_TAG, "loadFileAsString: " + ret);
         return ret;
     }
+
+//    private getFullPathFileName
 }

@@ -10,6 +10,7 @@ import java.io.IOException;
  */
 
 public interface API {
+    //IP address for local host in Android Emulator
     public static final String URL = "http://10.0.2.2:9000/api/exceptions";
 
     public interface Callback{
