@@ -3,6 +3,7 @@ package com.ex.org.exceptionstest.com.ex.lib;
 import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.ex.org.exceptionstest.com.ex.lib.data.Repository;
 import com.ex.org.exceptionstest.com.ex.lib.data.RepositoryImpl;
@@ -78,10 +79,8 @@ public final class ExceptionReporter {
         //TODO: extract data from Thread and send to the crash report.
         try {
             if (throwable != null) {
-                StringWriter sw = new StringWriter();
-                PrintWriter pw = new PrintWriter(sw);
-                throwable.printStackTrace(pw);
-                ExceptionReport report = new ExceptionReport(sw.toString());
+                //The Log.getStackTraceString(throwable) call looks for nested exceptions.
+                ExceptionReport report = new ExceptionReport(Log.getStackTraceString(throwable));
                 //Save the report
                 mRepo.saveExceptionReport(report);
             }
@@ -89,6 +88,4 @@ public final class ExceptionReporter {
             // do nothing.. let the exception propagate to the default handler
         }
     }
-
-    
 }
