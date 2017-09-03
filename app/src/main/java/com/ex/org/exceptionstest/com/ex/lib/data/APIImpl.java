@@ -28,19 +28,16 @@ public class APIImpl implements API {
     }
 
 
-    public void postAsync(String url, String json, String id, final Callback callback) throws IOException {
-//        post(url, json, id);
-        Util.log("Preparing to send file where id=" + id);
+    public void postAsync(String url, String json, final Callback callback) throws IOException {
+        Util.log("Sending File with payload= " + json);
         RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder()
             .url(url)
             .post(body)
-            .addHeader(HEADER_ID, id)
             .build();
 
         mClient.newCall(request).enqueue(new okhttp3.Callback() {
             @Override public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
                 callback.onError();
             }
 
@@ -48,14 +45,9 @@ public class APIImpl implements API {
                 ResponseBody responseBody = null;
                 try {
                     responseBody = response.body();
-                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-
-                    Headers responseHeaders = response.headers();
-                    for (int i = 0, size = responseHeaders.size(); i < size; i++) {
-                        System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+                    if (!response.isSuccessful()){
+                        throw new IOException("Unexpected code " + response);
                     }
-
-                    System.out.println(responseBody.string());
                     callback.onSuccess();
                 }
                 finally {
@@ -68,12 +60,11 @@ public class APIImpl implements API {
     }
 
 
-    public String postToDelete(String url, String json, String id) throws IOException {
+    public String postSync(String url, String json) throws IOException {
         RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder()
             .url(url)
             .post(body)
-            .addHeader(HEADER_ID, id)
             .build();
         Response response = null;
         try {
@@ -88,7 +79,7 @@ public class APIImpl implements API {
     }
 
     @Override
-    public void sendReport(String json, String id, Callback callback) throws IOException {
-        postAsync(API.URL, json, id, callback);
+    public void sendReport(String json, Callback callback) throws IOException {
+        postAsync(API.URL, json, callback);
     }
 }

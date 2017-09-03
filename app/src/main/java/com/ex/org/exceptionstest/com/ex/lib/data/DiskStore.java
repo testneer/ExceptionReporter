@@ -18,6 +18,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.concurrent.Executors;
 
 /**
  * Created by orenegauthier on 02/09/2017.
@@ -34,25 +35,34 @@ public class DiskStore{
         this.mContext = context;
     }
 
-    public void saveReportDataToFile(@NonNull ExceptionReport exceptionReport) throws FileNotFoundException, UnsupportedEncodingException {
-        File dir = mContext.getDir(FOLDER_NAME, Context.MODE_PRIVATE);
-        File fullPath = new File(dir, exceptionReport.getExceptionTime());
-        Log.d(ExceptionReporter.LOG_TAG, "Writing crash report to file " + fullPath.getAbsolutePath());
-        FileOutputStream fos = mContext.openFileOutput(fullPath.getName(), Context.MODE_PRIVATE);
-        OutputStreamWriter writer = new OutputStreamWriter(fos, UTF8);
-        try {
-            writer.write(exceptionReport.toJson().toString());
-            writer.flush();
-        } catch (Exception e) {
-            Log.e(ExceptionReporter.LOG_TAG, "An error occurred while writing the report file...", e);
-        }
-        finally {
-            try {
-                writer.close();
-            } catch (IOException ignored) {
-                // We made out best effort to release this resource. Nothing more we can do.
+    public void saveReportDataToFile(@NonNull final ExceptionReport exceptionReport){
+        Executors.newSingleThreadExecutor().submit(new Runnable() {
+            @Override
+            public void run() {
+                File dir = mContext.getDir(FOLDER_NAME, Context.MODE_PRIVATE);
+                File fullPath = new File(dir, exceptionReport.getExceptionTime());
+                Log.d(ExceptionReporter.LOG_TAG, "Writing crash report to file " + fullPath.getAbsolutePath());
+                OutputStreamWriter writer = null;
+                try {
+                    FileOutputStream fos = mContext.openFileOutput(fullPath.getName(), Context.MODE_PRIVATE);
+                    writer = new OutputStreamWriter(fos, UTF8);
+                    writer.write(exceptionReport.toJson().toString());
+                    writer.flush();
+                } catch (Exception e) {
+                    Log.e(ExceptionReporter.LOG_TAG, "An error occurred while writing the report file...", e);
+                }
+                finally {
+                    if(writer != null){
+                        try {
+                            writer.close();
+                        } catch (IOException ignored) {
+                            // We made out best effort to release this resource. Nothing more we can do.
+                        }
+                    }
+                }
             }
-        }
+        });
+
     }
 
     public File[] getStoredReports() {

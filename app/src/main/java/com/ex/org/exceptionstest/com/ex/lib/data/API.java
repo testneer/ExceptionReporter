@@ -17,7 +17,5 @@ public interface API {
         void onSuccess();
         void onError();
     }
-
-
-    void sendReport(String json, String id, Callback callback) throws IOException;
+    void sendReport(String json, Callback callback) throws IOException;
 }

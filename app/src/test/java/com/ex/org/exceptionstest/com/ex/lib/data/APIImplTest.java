@@ -13,7 +13,7 @@ public class APIImplTest {
     @Test
     public void testSendReport() throws Exception {
         APIImpl api = new APIImpl();
-        api.postToDelete(API.URL,bowlingJson("Oren", "Daniella"), "myID");
+        api.postSync(API.URL,bowlingJson("Oren", "Daniella"));
 
     }
 
