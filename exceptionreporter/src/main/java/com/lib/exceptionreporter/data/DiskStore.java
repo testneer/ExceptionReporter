@@ -1,12 +1,12 @@
-package com.ex.org.exceptionstest.com.ex.lib.data;
+package com.lib.exceptionreporter.data;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.ex.org.exceptionstest.com.ex.lib.ExceptionReporter;
-import com.ex.org.exceptionstest.com.ex.lib.Util;
-import com.ex.org.exceptionstest.com.ex.lib.model.ExceptionReport;
+import com.lib.exceptionreporter.ExceptionReporter;
+import com.lib.exceptionreporter.Util;
+import com.lib.exceptionreporter.model.ExceptionReport;
 
 import java.io.BufferedReader;
 import java.io.File;

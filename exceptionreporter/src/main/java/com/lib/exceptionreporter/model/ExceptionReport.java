@@ -1,8 +1,9 @@
-package com.ex.org.exceptionstest.com.ex.lib.model;
+package com.lib.exceptionreporter.model;
 
 import android.util.Log;
 
-import com.ex.org.exceptionstest.com.ex.lib.ExceptionReporter;
+
+import com.lib.exceptionreporter.ExceptionReporter;
 
 import org.json.JSONException;
 import org.json.JSONObject;

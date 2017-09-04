@@ -1,4 +1,4 @@
-package com.ex.org.exceptionstest.com.ex.lib.data;
+package com.lib.exceptionreporter.data;
 
 import java.io.IOException;
 

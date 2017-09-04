@@ -1,4 +1,4 @@
-package com.ex.org.exceptionstest.com.ex.lib;
+package com.lib.exceptionreporter;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;

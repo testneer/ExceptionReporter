@@ -1,16 +1,14 @@
-package com.ex.org.exceptionstest.com.ex.lib;
+package com.lib.exceptionreporter;
 
-import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.ex.org.exceptionstest.com.ex.lib.data.Repository;
-import com.ex.org.exceptionstest.com.ex.lib.data.RepositoryImpl;
-import com.ex.org.exceptionstest.com.ex.lib.model.ExceptionReport;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import com.lib.exceptionreporter.data.Repository;
+import com.lib.exceptionreporter.data.RepositoryImpl;
+import com.lib.exceptionreporter.model.ExceptionReport;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;

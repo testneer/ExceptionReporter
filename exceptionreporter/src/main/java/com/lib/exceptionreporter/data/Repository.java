@@ -1,6 +1,7 @@
-package com.ex.org.exceptionstest.com.ex.lib.data;
+package com.lib.exceptionreporter.data;
 
-import com.ex.org.exceptionstest.com.ex.lib.model.ExceptionReport;
+
+import com.lib.exceptionreporter.model.ExceptionReport;
 
 /**
  * Created by orenegauthier on 02/09/2017.
