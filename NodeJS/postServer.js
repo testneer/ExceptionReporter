@@ -7,13 +7,18 @@ server = http.createServer( function(req, res) {
         var body = '';
         req.on('data', function (data) {
             body += data;
-            console.log("Partial body: " + body);
-        });
+            // console.log("Partial body: " + body);
+                    });
         req.on('end', function () {
             console.log("Body: " + body);
+            var timeStamp = new Date().getTime();
+            var fileName = timeStamp.toString()+".txt"
+            console.log("Saving body to file: " + fileName);
+            fs.writeFileSync(fileName, body,'utf8');
         });
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.end('post received');
+
     }
     else
     {
