@@ -3,7 +3,6 @@ package com.ex.org.exceptionstest.com.ex.lib;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.icu.text.IDNA;
 
 import java.util.HashMap;
 import java.util.Map;

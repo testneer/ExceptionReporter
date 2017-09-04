@@ -11,20 +11,17 @@ import com.ex.org.exceptionstest.com.ex.lib.model.ExceptionReport;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.concurrent.Executors;
 
 /**
  * Created by orenegauthier on 02/09/2017.
  */
 
-public class DiskStore{
+class DiskStore{
 
     private Context mContext;
     public static final String UTF8 = "UTF-8";
@@ -80,7 +77,7 @@ public class DiskStore{
         }
     }
 
-    public String loadFileAsString(@NonNull File file) throws IOException {
+     String loadFileAsString(@NonNull File file) throws IOException {
         FileInputStream fis = new FileInputStream(file);
         BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
         StringBuilder sb = new StringBuilder();

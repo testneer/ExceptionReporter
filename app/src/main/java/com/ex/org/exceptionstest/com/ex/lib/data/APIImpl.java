@@ -5,7 +5,6 @@ import com.ex.org.exceptionstest.com.ex.lib.Util;
 import java.io.IOException;
 
 import okhttp3.Call;
-import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -28,7 +27,7 @@ public class APIImpl implements API {
     }
 
 
-    public void postAsync(String url, String json, final Callback callback) throws IOException {
+    private void postAsync(String url, String json, final Callback callback) throws IOException {
         Util.log("Sending File with payload= " + json);
         RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder()
@@ -60,7 +59,7 @@ public class APIImpl implements API {
     }
 
 
-    public String postSync(String url, String json) throws IOException {
+    String postSync(String url, String json) throws IOException {
         RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder()
             .url(url)

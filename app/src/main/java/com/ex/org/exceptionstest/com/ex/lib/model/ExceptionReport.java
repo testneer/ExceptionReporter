@@ -22,29 +22,25 @@ public class ExceptionReport {
     private static final String KEY_STACKTRACE = "stacktrace";
     private static final String KEY_EXCEPTION_TIME = "exceptionTime";
 
-
-
     //device type
     //os version
     //device manufacturer
     //screen size
     //many more
+    //
 
 
     public ExceptionReport(String stacktrace){
         data.put(KEY_STACKTRACE, stacktrace);
         data.put(KEY_EXCEPTION_TIME, Long.toString(Calendar.getInstance().getTimeInMillis()));
-
-        //TODO: remove this debug statment
         Log.d(ExceptionReporter.LOG_TAG, "Logging new Exception " + getExceptionTime());
     }
 
+    public void addExtraInfo(Map<String, String> extraInfo){
+        data.putAll(extraInfo);
+    }
     public String getExceptionTime() {
         return data.get(KEY_EXCEPTION_TIME);
-    }
-
-    public String getStackTrace() {
-        return data.get(KEY_STACKTRACE);
     }
 
     public JSONObject toJson(){

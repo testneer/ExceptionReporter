@@ -25,6 +25,7 @@ public final class ExceptionReporter {
     private static ExceptionReporter sInstance;
     private Repository mRepo;
     private boolean mInitiated;
+    private Context mContext;
 
 
     public final static String LOG_TAG = "ExceptionReporter";
@@ -32,10 +33,9 @@ public final class ExceptionReporter {
     //private constructor
     private ExceptionReporter(Context ctx){
         mRepo = new RepositoryImpl(ctx);
+        mContext = ctx;
         //If there are any unsent crashes send them now.
         mRepo.sendStoredReports();
-
-
     };
 
 
@@ -60,8 +60,8 @@ public final class ExceptionReporter {
 
     public void init(){
         if(!mInitiated){
-            interceptExceptions();
             mInitiated = true;
+            interceptExceptions();
             setSendReportTimer();
         }
     }
@@ -106,6 +106,8 @@ public final class ExceptionReporter {
             if (throwable != null) {
                 //The Log.getStackTraceString(throwable) call looks for nested exceptions.
                 ExceptionReport report = new ExceptionReport(Log.getStackTraceString(throwable));
+                //add extra info to better understand the Exception cause
+                report.addExtraInfo(new InfoCollector(mContext).getExtraInfo());
                 //Save the report
                 mRepo.saveExceptionReport(report);
             }

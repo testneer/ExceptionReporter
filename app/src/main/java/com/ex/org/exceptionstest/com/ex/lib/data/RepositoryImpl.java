@@ -8,9 +8,7 @@ import com.ex.org.exceptionstest.com.ex.lib.Util;
 import com.ex.org.exceptionstest.com.ex.lib.model.ExceptionReport;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.concurrent.Executors;
 
